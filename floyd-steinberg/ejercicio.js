@@ -102,31 +102,29 @@ function dither(image, factor)
 // Imágenes a restar (imageA y imageB) y el retorno en result
 function substraction(imageA,imageB,result) 
 {
-    console.log(result.width);
-    console.log(result.height);
-
-    for(let y = 0; y < image.height; y++) {
-        for(let x = 0; x < image.width; x++) {
+    
+    for(let y = 0; y < imageA.height; y++) {
+        for(let x = 0; x < imageA.width; x++) {
            
             const colorsIndices = getColorIndicesForCoord(x,y,imageA.width);
-            const redIndex = colorIndices[0];
-            const greenIndex = colorIndices[1];
-            const blueIndex = colorIndices[2];
-            const alphaIndex = colorIndices[3];
+            const redIndex = colorsIndices[0];
+            const greenIndex = colorsIndices[1];
+            const blueIndex = colorsIndices[2];
+            const alphaIndex = colorsIndices[3];
 
+            const newRed = Math.abs(imageA.data[redIndex] - imageB.data[redIndex]);
 
-            const newRed = Math.abs((imageA.data[alphaIndex] * imageA.data[redIndex]) - imageB.data[redIndex]);
-
-            const newBlue = Math.abs((imageA.data[alphaIndex] * imageA.data[blueIndex]) - imageB.data[blueIndex]);
-            const newGreen = Math.abs((imageA.data[alphaIndex] * imageA.data[greenIndex]) - imageB.data[greenIndex]);
+            const newBlue = Math.abs(imageA.data[blueIndex] - imageB.data[blueIndex]);
+            const newGreen = Math.abs(imageA.data[greenIndex] - imageB.data[greenIndex]);
             
             result.data[redIndex] = newRed;
 
             result.data[greenIndex] = newGreen;
 
-            result.data[blueIndex] = newGreen;
+            result.data[blueIndex] = newBlue;
 
             result.data[alphaIndex] = imageA.data[alphaIndex];
         }
     }
+    
 }
