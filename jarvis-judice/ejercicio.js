@@ -114,8 +114,8 @@ function dither(image, factor)
             setColorToNeighbor(x+1,y + 1,error,5/48,image);
             setColorToNeighbor(x+2,y + 1,error,3/48,image);
             
-            setColorToNeighbor(x-1,y + 2,error,1/48,image);
-            setColorToNeighbor(x-2,y + 2,error, 3/48,image);
+            setColorToNeighbor(x-2,y + 2,error,1/48,image);
+            setColorToNeighbor(x-1,y + 2,error, 3/48,image);
             setColorToNeighbor(x,y + 2,error,5/48,image);
             setColorToNeighbor(x+1,y + 2,error,3/48,image);
             setColorToNeighbor(x+2,y + 2,error,1/48,image);
