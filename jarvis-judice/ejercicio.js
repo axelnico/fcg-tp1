@@ -80,24 +80,55 @@ const setColorToPixel = (x, y, palette, image) => {
 // La imagen que tienen que modificar viene en el parámetro image y contiene inicialmente los datos originales
 // es objeto del tipo ImageData ( más info acá https://mzl.la/3rETTC6  )
 // Factor indica la cantidad de intensidades permitidas (sin contar el 0)
+
+function intensities(factor){
+    let range = [0];
+    let i = 1;
+    const cociente = 256/factor;
+    while(i<factor){
+        range.push(cociente*i);
+        i++;
+    }
+
+    range.push(255);
+    return range;
+}
+
+
 function dither(image, factor)
 {
-
     const palette = getPalette(factor);
-
-    for(let y = 0; y < image.height; y++) {
-        for(let x = 0; x < image.width; x++) {
-            
+    let xlim = image.width - 2;
+    let ylim = image.height - 2;
+    const pixLen = 4;
+    for(let y = 0; y < ylim; y++){
+        for(let x = 0; x < xlim; x++){
             const error = setColorToPixel(x,y,palette,image);
 
-            setColorToNeighbor(x+1,y,error,7/16,image);
-            setColorToNeighbor(x-1,y + 1,error,3/16,image);
-            setColorToNeighbor(x,y + 1,error,5/16,image);
-            setColorToNeighbor(x+1,y + 1,error,1/16,image);
+            setColorToNeighbor(x+1,y,error,7/48,image);
+            setColorToNeighbor(x+2,y,error,5/48,image);
+
+            setColorToNeighbor(x-2,y + 1,error,3/48,image);
+            setColorToNeighbor(x-1,y + 1,error,5/48,image);
+            setColorToNeighbor(x,y + 1,error,7/48,image);
+            setColorToNeighbor(x+1,y + 1,error,5/48,image);
+            setColorToNeighbor(x+2,y + 1,error,3/48,image);
             
+            setColorToNeighbor(x-1,y + 2,error,1/48,image);
+            setColorToNeighbor(x-2,y + 2,error, 3/48,image);
+            setColorToNeighbor(x,y + 2,error,5/48,image);
+            setColorToNeighbor(x+1,y + 2,error,3/48,image);
+            setColorToNeighbor(x+2,y + 2,error,1/48,image);
+
+            
+
+
         }
     }
+
 }
+
+
 
 // Imágenes a restar (imageA y imageB) y el retorno en result
 function substraction(imageA,imageB,result) 
