@@ -40,6 +40,7 @@ const getPalette = (factor) => {
 }
 
 const setColorToNeighbor = (x,y,error,coefficient, image) => {
+    // Verficamos que es un pixel existente, dentro de los limites de la imagen
     if(x >= image.width || y >= image.height || x < 0) return;
     const colorIndices = getColorIndicesForCoord(x,y,image.width);
 
@@ -90,10 +91,35 @@ function dither(image, factor)
             
             const error = setColorToPixel(x,y,palette,image);
 
-            setColorToNeighbor(x+1,y,error,7/16,image);
-            setColorToNeighbor(x-1,y + 1,error,3/16,image);
-            setColorToNeighbor(x,y + 1,error,5/16,image);
-            setColorToNeighbor(x+1,y + 1,error,1/16,image);
+            const errorKernel = [7,3,5,1];
+
+            // Si estamos en los bordes y no podemos distribuir el error entre algunos vecinos, lo distribuimos entre los 
+            // que si se pueden distribuir, de manera que siempre el error aplicado a cada vecino sume 1
+            
+            // Si estamos en el borde derecho, los dos vecinos de la derecha no existen, repartimos el error entre los otros 
+            // dos vecinos que quedan
+            if (x === image.widht - 1) {
+               errorKernel[1] += 4;
+               errorKernel[2] += 4;
+            }
+
+            // Si estamos en la ultima fila ninguno de los vecinos de abajo existe, le damos todo el error al unico vecino que queda
+            if (y === image.height - 1) {
+               errorKernel[0] += 9;
+            }
+
+            // Si estamos en la primer columna y no es la ultima fila, el unico vecino que no existe es el de la esquina de abajo a 
+            // la izquierda. Distribuimos ese 3/16 proporcion de error entre los otros vecinos
+            if (x === 0 && y < image.height - 1) {
+               errorKernel[0] += 1;
+               errorKernel[2] += 1;
+               errorKernel[3] += 1;
+            }
+
+            setColorToNeighbor(x+1,y,error,errorKernel[0]/16,image);
+            setColorToNeighbor(x-1,y + 1,error,errorKernel[1]/16,image);
+            setColorToNeighbor(x,y + 1,error,errorKernel[2]/16,image);
+            setColorToNeighbor(x+1,y + 1,error,errorKernel[3]/16,image);
             
         }
     }

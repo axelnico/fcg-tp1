@@ -91,20 +91,73 @@ function dither(image, factor)
         for(let x = 0; x < xlim; x++){
             const error = setColorToPixel(x,y,palette,image);
 
-            setColorToNeighbor(x+1,y,error,7/48,image);
-            setColorToNeighbor(x+2,y,error,5/48,image);
+            const errorKernel = [7,5,3,5,7,5,3,1,3,5,3,1];
 
-            setColorToNeighbor(x-2,y + 1,error,3/48,image);
-            setColorToNeighbor(x-1,y + 1,error,5/48,image);
-            setColorToNeighbor(x,y + 1,error,7/48,image);
-            setColorToNeighbor(x+1,y + 1,error,5/48,image);
-            setColorToNeighbor(x+2,y + 1,error,3/48,image);
             
-            setColorToNeighbor(x-2,y + 2,error,1/48,image);
-            setColorToNeighbor(x-1,y + 2,error, 3/48,image);
-            setColorToNeighbor(x,y + 2,error,5/48,image);
-            setColorToNeighbor(x+1,y + 2,error,3/48,image);
-            setColorToNeighbor(x+2,y + 2,error,1/48,image);
+            if (x === image.widht - 1) {
+                errorKernel[2] += 4;
+                errorKernel[3] += 4;
+                errorKernel[4] += 4;
+                errorKernel[7] += 4;
+                errorKernel[8] += 4;
+                errorKernel[9] += 4;
+            }
+
+            if (x === image.widht - 2) {
+                errorKernel[0] += 1;
+                errorKernel[2] += 1;
+                errorKernel[3] += 1;
+                errorKernel[4] += 1;
+                errorKernel[5] += 1;
+                errorKernel[7] += 1;
+                errorKernel[8] += 1;
+                errorKernel[9] += 1;
+                errorKernel[10] += 1;
+            }
+
+           
+            if (y === image.height - 1) {
+                errorKernel[0] += 18;
+                errorKernel[1] += 18;
+            }
+
+            if (y === image.height - 2) {
+                errorKernel[0] += 2;
+                errorKernel[1] += 2;
+                errorKernel[2] += 2;
+                errorKernel[3] += 2;
+                errorKernel[4] += 2;
+                errorKernel[5] += 2;
+                errorKernel[6] += 1;
+            }
+
+            if (x === 0 && y < image.height - 2) {
+                errorKernel[0] += 3;
+                errorKernel[1] += 3;
+                errorKernel[4] += 1;
+                errorKernel[5] += 1;
+                errorKernel[6] += 1;
+                errorKernel[9] += 1;
+                errorKernel[10] += 1;
+                errorKernel[11] += 1;
+            }
+
+            
+
+            setColorToNeighbor(x+1,y,error,errorKernel[0]/48,image);
+            setColorToNeighbor(x+2,y,error,errorKernel[1]/48,image);
+
+            setColorToNeighbor(x-2,y + 1,error,errorKernel[2]/48,image);
+            setColorToNeighbor(x-1,y + 1,error,errorKernel[3]/48,image);
+            setColorToNeighbor(x,y + 1,error,errorKernel[4]/48,image);
+            setColorToNeighbor(x+1,y + 1,error,errorKernel[5]/48,image);
+            setColorToNeighbor(x+2,y + 1,error,errorKernel[6]/48,image);
+            
+            setColorToNeighbor(x-2,y + 2,error,errorKernel[7]/48,image);
+            setColorToNeighbor(x-1,y + 2,error, errorKernel[8]/48,image);
+            setColorToNeighbor(x,y + 2,error,errorKernel[9]/48,image);
+            setColorToNeighbor(x+1,y + 2,error,errorKernel[10]/48,image);
+            setColorToNeighbor(x+2,y + 2,error,errorKernel[11]/48,image);
 
             
 
