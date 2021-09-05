@@ -81,20 +81,6 @@ const setColorToPixel = (x, y, palette, image) => {
 // es objeto del tipo ImageData ( más info acá https://mzl.la/3rETTC6  )
 // Factor indica la cantidad de intensidades permitidas (sin contar el 0)
 
-function intensities(factor){
-    let range = [0];
-    let i = 1;
-    const cociente = 256/factor;
-    while(i<factor){
-        range.push(cociente*i);
-        i++;
-    }
-
-    range.push(255);
-    return range;
-}
-
-
 function dither(image, factor)
 {
     const palette = getPalette(factor);
