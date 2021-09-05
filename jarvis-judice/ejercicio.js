@@ -84,11 +84,8 @@ const setColorToPixel = (x, y, palette, image) => {
 function dither(image, factor)
 {
     const palette = getPalette(factor);
-    let xlim = image.width - 2;
-    let ylim = image.height - 2;
-    const pixLen = 4;
-    for(let y = 0; y < ylim; y++){
-        for(let x = 0; x < xlim; x++){
+    for(let y = 0; y < image.height; y++){
+        for(let x = 0; x < image.width; x++){
             const error = setColorToPixel(x,y,palette,image);
 
             setColorToNeighbor(x+1,y,error,7/48,image);
@@ -105,10 +102,6 @@ function dither(image, factor)
             setColorToNeighbor(x,y + 2,error,5/48,image);
             setColorToNeighbor(x+1,y + 2,error,3/48,image);
             setColorToNeighbor(x+2,y + 2,error,1/48,image);
-
-            
-
-
         }
     }
 
