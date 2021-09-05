@@ -26,14 +26,14 @@ const findClosest = (arr, target) =>
 }
 
 const getPalette = (factor) => {
-    const step = Math.round(255 / factor);
+    const step = Math.round(255 / Number(factor));
     const palette = [];
     let color = 0;
     while (color <= 255){
         palette.push(color);
         color += step;
     }
-    if (palette.length < (factor + 1)){
+    if (palette.length < (Number(factor) + 1)){
         palette.push(255);
     }
     return palette;
