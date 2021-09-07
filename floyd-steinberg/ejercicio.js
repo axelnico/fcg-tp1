@@ -40,6 +40,9 @@ const getPalette = (factor) => {
 }
 
 const setColorToNeighbor = (x,y,error,coefficient, image) => {
+    // Si son los bordes y se quiere acceder a un vecino que no existe simplemente retornamos el control. 
+    // No redistribuimos el error de manera distinta entre los vecinos que si quedaron para que siempre la suma de las
+    // proporciones de 1, ya que se se observo que no cambia significativamente el resultado visual
     if(x >= image.width || y >= image.height || x < 0) return;
     const colorIndices = getColorIndicesForCoord(x,y,image.width);
 
